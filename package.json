@@ -4,7 +4,9 @@
 	"description": "Zero-configuration bundler for tiny JS libs, powered by Rollup, includes SVGR.",
 	"main": "dist/microbundle.js",
 	"source": "src/index.js",
-	"bin": "dist/cli.js",
+	"bin": {
+		"microbundle": "dist/cli.js"
+	},
 	"scripts": {
 		"build": "npm run -s build:babel && npm run -s build:self",
 		"build:babel": "babel-node src/cli.js --target=node --format cjs src/{cli,index}.js",
@@ -88,6 +90,7 @@
 		"@rollup/plugin-commonjs": "^17.0.0",
 		"@rollup/plugin-json": "^4.1.0",
 		"@rollup/plugin-node-resolve": "^11.0.1",
+		"@rollup/plugin-url": "^7.0.0",
 		"@surma/rollup-plugin-off-main-thread": "^2.2.2",
 		"@svgr/rollup": "^6.2.1",
 		"asyncro": "^3.0.0",
