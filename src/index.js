@@ -20,6 +20,7 @@ import postcss from 'rollup-plugin-postcss';
 import typescript from 'rollup-plugin-typescript2';
 import json from '@rollup/plugin-json';
 import svgr from '@svgr/rollup';
+import url from '@rollup/plugin-url';
 import OMT from '@surma/rollup-plugin-off-main-thread';
 import logError from './log-error';
 import {
@@ -528,7 +529,13 @@ function createConfig(options, entry, format, writeMeta) {
 						requireReturnsDefault: 'namespace',
 					}),
 					json(),
-					svgr(),
+					url({
+						include: './**/*.svg',
+					}),
+					svgr({
+						icon: true,
+						dimensions: true,
+					}),
 					{
 						// We have to remove shebang so it doesn't end up in the middle of the code somewhere
 						transform: code => ({
