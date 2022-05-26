@@ -1,8 +1,8 @@
 import fs from 'fs';
-import { resolve, relative, dirname, basename, extname } from 'path';
+import { basename, dirname, extname, relative, resolve } from 'path';
 import camelCase from 'camelcase';
 import escapeStringRegexp from 'escape-string-regexp';
-import { blue, yellow, red } from 'kleur';
+import { blue, red, yellow } from 'kleur';
 import { map, series } from 'asyncro';
 import glob from 'tiny-glob/sync';
 import autoprefixer from 'autoprefixer';
@@ -19,6 +19,7 @@ import alias from '@rollup/plugin-alias';
 import postcss from 'rollup-plugin-postcss';
 import typescript from 'rollup-plugin-typescript2';
 import json from '@rollup/plugin-json';
+import svgr from '@svgr/rollup';
 import OMT from '@surma/rollup-plugin-off-main-thread';
 import logError from './log-error';
 import {
@@ -26,8 +27,8 @@ import {
 	isDir,
 	isFile,
 	isTruthy,
-	stdout,
 	removeScope,
+	stdout,
 } from './utils';
 import { getSizeInfo } from './lib/compressed-size';
 import { normalizeMinifyOptions } from './lib/terser';
@@ -37,7 +38,7 @@ import {
 	toReplacementExpression,
 } from './lib/option-normalization';
 import { getConfigFromPkgJson, getName } from './lib/package-info';
-import { shouldCssModules, cssModulesConfig } from './lib/css-modules';
+import { cssModulesConfig, shouldCssModules } from './lib/css-modules';
 import { EOL } from 'os';
 
 // Extensions to use when resolving modules
@@ -71,6 +72,7 @@ export default async function microbundle(inputOptions) {
 	options.pkg.name = pkgName;
 
 	if (options.sourcemap === 'inline') {
+		// eslint-disable-next-line no-console
 		console.log(
 			'Warning: inline sourcemaps should only be used for debugging purposes.',
 		);
@@ -152,7 +154,7 @@ export default async function microbundle(inputOptions) {
 function doWatch(options, cwd, steps) {
 	const { onStart, onBuild, onError } = options;
 
-	return new Promise((resolve, reject) => {
+	return new Promise(resolve => {
 		const targetDir = relative(cwd, dirname(options.output));
 		stdout(blue(`Watching source, compiling to ${targetDir}:`));
 
@@ -252,7 +254,7 @@ function getDeclarationDir({ options, pkg }) {
 }
 
 async function getEntries({ input, cwd }) {
-	let entries = (
+	return (
 		await map([].concat(input), async file => {
 			file = resolve(cwd, file);
 			if (await isDir(file)) {
@@ -261,7 +263,6 @@ async function getEntries({ input, cwd }) {
 			return file;
 		})
 	).filter((item, i, arr) => arr.indexOf(item) === i);
-	return entries;
 }
 
 function replaceName(filename, name) {
@@ -413,7 +414,7 @@ function createConfig(options, entry, format, writeMeta) {
 		`^(${external.map(escapeStringExternals).join('|')})($|/)`,
 	);
 	const externalTest =
-		external.length === 0 ? id => false : id => externalPredicate.test(id);
+		external.length === 0 ? () => false : id => externalPredicate.test(id);
 
 	let endsWithNewLine = false;
 
@@ -527,6 +528,7 @@ function createConfig(options, entry, format, writeMeta) {
 						requireReturnsDefault: 'namespace',
 					}),
 					json(),
+					svgr(),
 					{
 						// We have to remove shebang so it doesn't end up in the middle of the code somewhere
 						transform: code => ({
@@ -647,6 +649,7 @@ function createConfig(options, entry, format, writeMeta) {
 					options.visualize && visualizer(),
 					// NOTE: OMT only works with amd and esm
 					// Source: https://github.com/surma/rollup-plugin-off-main-thread#config
+					// eslint-disable-next-line new-cap
 					useWorkerLoader && (format === 'es' || modern) && OMT(),
 					/** @type {import('rollup').Plugin} */
 					({

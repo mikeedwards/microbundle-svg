@@ -1,7 +1,7 @@
 {
-	"name": "microbundle",
+	"name": "microbundle-svg",
 	"version": "0.15.0",
-	"description": "Zero-configuration bundler for tiny JS libs, powered by Rollup.",
+	"description": "Zero-configuration bundler for tiny JS libs, powered by Rollup, includes SVGR.",
 	"main": "dist/microbundle.js",
 	"source": "src/index.js",
 	"bin": "dist/cli.js",
@@ -18,7 +18,7 @@
 		"changeset": "changeset",
 		"release": "npm run -s prepare && npm test && changeset publish"
 	},
-	"repository": "developit/microbundle",
+	"repository": "mikeedwards/microbundle-svg",
 	"prettier": {
 		"singleQuote": true,
 		"trailingComma": "all",
@@ -89,6 +89,7 @@
 		"@rollup/plugin-json": "^4.1.0",
 		"@rollup/plugin-node-resolve": "^11.0.1",
 		"@surma/rollup-plugin-off-main-thread": "^2.2.2",
+		"@svgr/rollup": "^6.2.1",
 		"asyncro": "^3.0.0",
 		"autoprefixer": "^10.1.0",
 		"babel-plugin-macros": "^3.0.1",
@@ -104,6 +105,7 @@
 		"lodash.merge": "^4.6.2",
 		"postcss": "^8.2.1",
 		"pretty-bytes": "^5.4.1",
+		"resolve-from": "^5.0.0",
 		"rollup": "^2.35.1",
 		"rollup-plugin-bundle-size": "^1.0.3",
 		"rollup-plugin-postcss": "^4.0.0",

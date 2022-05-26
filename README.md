@@ -29,6 +29,7 @@
 - Creates multiple output formats for each entry _(<abbr title="CommonJS (node)">CJS</abbr>, <abbr title="Universal Module Definition">UMD</abbr> & <abbr title="ECMAScript Modules">ESM</abbr>)_
 - 0 configuration TypeScript support
 - Built-in Terser compression & gzipped bundle size tracking
+- [Includes support for SVGR](https://github.com/mikeedwards/microbundle-svg)
 
 ## 🔧 Installation & Setup <a name="setup"></a> <a name="installation"></a>
 
@@ -38,20 +39,20 @@
 
 ```jsonc
 {
-  "name": "foo",                      // your package name
-  "type": "module",
-  "source": "src/foo.js",             // your source code
-  "exports": {
-    "require": "./dist/foo.cjs",      // used for require() in Node 12+
-    "default": "./dist/foo.modern.js" // where to generate the modern bundle (see below)
-  },
-  "main": "./dist/foo.cjs",           // where to generate the CommonJS bundle
-  "module": "./dist/foo.module.js",   // where to generate the ESM bundle
-  "unpkg": "./dist/foo.umd.js",       // where to generate the UMD bundle (also aliased as "umd:main")
-  "scripts": {
-    "build": "microbundle",           // compiles "source" to "main"/"module"/"unpkg"
-    "dev": "microbundle watch"        // re-build when source files change
-  }
+	"name": "foo", // your package name
+	"type": "module",
+	"source": "src/foo.js", // your source code
+	"exports": {
+		"require": "./dist/foo.cjs", // used for require() in Node 12+
+		"default": "./dist/foo.modern.js" // where to generate the modern bundle (see below)
+	},
+	"main": "./dist/foo.cjs", // where to generate the CommonJS bundle
+	"module": "./dist/foo.module.js", // where to generate the ESM bundle
+	"unpkg": "./dist/foo.umd.js", // where to generate the UMD bundle (also aliased as "umd:main")
+	"scripts": {
+		"build": "microbundle", // compiles "source" to "main"/"module"/"unpkg"
+		"dev": "microbundle watch" // re-build when source files change
+	}
 }
 ```
 
@@ -163,15 +164,15 @@ The filenames and paths for generated bundles in each format are defined by the 
 
 ```jsonc
 {
-  "source": "src/index.js",             // input
-  "main": "dist/foo.js",                // CommonJS output bundle
-  "umd:main": "dist/foo.umd.js",        // UMD output bundle
-  "module": "dist/foo.mjs",           // ES Modules output bundle
-  "exports": {
-    "require": "./dist/foo.js",         // CommonJS output bundle
-    "default": "./dist/foo.modern.mjs", // Modern ES Modules output bundle
-  },
-  "types": "dist/foo.d.ts"              // TypeScript typings directory
+	"source": "src/index.js", // input
+	"main": "dist/foo.js", // CommonJS output bundle
+	"umd:main": "dist/foo.umd.js", // UMD output bundle
+	"module": "dist/foo.mjs", // ES Modules output bundle
+	"exports": {
+		"require": "./dist/foo.js", // CommonJS output bundle
+		"default": "./dist/foo.modern.mjs" // Modern ES Modules output bundle
+	},
+	"types": "dist/foo.d.ts" // TypeScript typings directory
 }
 ```
 
@@ -189,9 +190,9 @@ When using `{"type":"module"}`, the file extension for CommonJS bundles generate
 
 ```jsonc
 {
-  "type": "module",
-  "module": "dist/foo.js",  // ES Module bundle
-  "main": "dist/foo.cjs",   // CommonJS bundle
+	"type": "module",
+	"module": "dist/foo.js", // ES Module bundle
+	"main": "dist/foo.cjs" // CommonJS bundle
 }
 ```
 
@@ -201,14 +202,14 @@ Config also can be overridded by the [`publishConfig`](https://docs.npmjs.com/cl
 
 ```jsonc
 {
-  "main": "src/index.ts",          // this would be used in the dev environment (e.g. Jest)
-  "publishConfig": {
-    "source": "src/index.js",      // input
-    "main": "dist/my-library.js",  // output
-  },
-  "scripts": {
-    "build": "microbundle"
-  }
+	"main": "src/index.ts", // this would be used in the dev environment (e.g. Jest)
+	"publishConfig": {
+		"source": "src/index.js", // input
+		"main": "dist/my-library.js" // output
+	},
+	"scripts": {
+		"build": "microbundle"
+	}
 }
 ```
 
@@ -264,7 +265,9 @@ Microbundle is able to detect and bundle Module Workers when generating bundles 
 `esm` and `modern` formats. To use this feature, instantiate your Web Worker as follows:
 
 ```js
-worker = new Worker(new URL('./worker.js', import.meta.url), { type: 'module' });
+worker = new Worker(new URL('./worker.js', import.meta.url), {
+	type: 'module',
+});
 // or simply:
 worker = new Worker('./worker.js', { type: 'module' });
 ```
@@ -381,7 +384,6 @@ Here's what's coming up for Microbundle:
 - [goober](https://github.com/cristianbote/goober) Less than 1KB css-in-js alternative with a familiar API.
 - [react-model](https://github.com/byte-fe/react-model) The next generation state management library for React
 - [Teaful](https://github.com/teafuljs/teaful) Tiny, easy and powerful (P)React state management
-
 
 ## 🥂 License
 
