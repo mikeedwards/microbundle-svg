@@ -18,7 +18,8 @@
 		"jest": "cross-env BABEL_ENV=test jest",
 		"format": "prettier --write \"{*,{src,test}/**/*}.+(js|css)\"",
 		"changeset": "changeset",
-		"release": "npm run -s prepare && npm test && changeset publish"
+		"release": "npm run -s prepare && npm test && changeset publish",
+    "install": "npm run -s prepare"
 	},
 	"repository": "mikeedwards/microbundle-svg",
 	"prettier": {
